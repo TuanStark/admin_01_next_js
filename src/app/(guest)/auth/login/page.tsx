@@ -1,6 +1,9 @@
 import Login from "@/components/auth/login";
+import { auth } from "@/auth";
+const LoginPage = async () => {
 
-const LoginPage = () => {
+    // const sesion = await auth();
+    // console.log(">> check session: ", sesion);
     return (
         <Login />
     )

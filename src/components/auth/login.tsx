@@ -1,16 +1,35 @@
 'use client'
-import { Button, Col, Divider, Form, Input, Row } from 'antd';
+import { Button, Col, Divider, Form, Input, Row, message, notification } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { authenticate } from '@/utils/action';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
+    const router = useRouter();
 
     const onFinish = async (values: any) => {
-        console.log(values);
+        console.log(">> check values: ", values);
         const { email, password } = values;
-        const res = await authenticate(email, password);
-        console.log(">> check response: ",res);
+        const res = await authenticate({
+            email: email,
+            password: password,
+        });
+        console.log(">> check res: ", res);
+        if (res?.error) {
+            notification.error({
+                message: "Error login",
+                description: res.error,
+                duration: 3
+            });
+            // if(res.code === 2){
+            //     router.push("/auth/verify-email");
+            // }
+        } else {
+            //redirect to home page
+            router.push("/dashboard");
+        }
     };
 
     return (
@@ -33,10 +52,8 @@ const Login = () => {
                             label="Email"
                             name="email"
                             rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your email!',
-                                },
+                                { required: true, message: 'Please input your email!' },
+                                { type: 'email', message: 'Invalid email format!' }
                             ]}
                         >
                             <Input />
@@ -46,10 +63,8 @@ const Login = () => {
                             label="Password"
                             name="password"
                             rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your password!',
-                                },
+                                { required: true, message: 'Please input your password!' },
+                                { min: 6, message: 'Password must be at least 6 characters!' }
                             ]}
                         >
                             <Input.Password />

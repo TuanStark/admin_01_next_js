@@ -1,6 +1,22 @@
 export { };
 // https://bobbyhadz.com/blog/typescript-make-types-global#declare-global-types-in-typescript
 
+export interface IBackendRes<T> {
+    error?: string | string[];
+    message: string;
+    statusCode: number | string;
+    data?: T;
+}
+
+export interface ILogin {
+    user: {
+        _id: string;
+        email: string;
+        name?: string;
+    };
+    accessToken: string;
+}
+
 declare global {
     interface IRequest {
         url: string;
@@ -12,13 +28,6 @@ declare global {
         nextOption?: any;
     }
 
-    interface IBackendRes<T> {
-        error?: string | string[];
-        message: string;
-        statusCode: number | string;
-        data?: T;
-    }
-
     interface IModelPaginate<T> {
         meta: {
             current: number;
@@ -28,5 +37,4 @@ declare global {
         },
         result: T[]
     }
-
 }
