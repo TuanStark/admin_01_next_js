@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 import '@/app/globals.css';
-
+import NextAuthWrapper from "@/library/nextauth.wrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AntdRegistry>
-          {children}
+          <NextAuthWrapper>
+            {children}
+          </NextAuthWrapper>
         </AntdRegistry>
 
       </body>

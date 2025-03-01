@@ -3,7 +3,6 @@ import { Button, Col, Divider, Form, Input, Row, message, notification } from 'a
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { authenticate } from '@/utils/action';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 const Login = () => {
@@ -23,9 +22,9 @@ const Login = () => {
                 description: res.error,
                 duration: 3
             });
-            // if(res.code === 2){
-            //     router.push("/auth/verify-email");
-            // }
+            if ('code' in res && res.code === 2) {
+                router.push("/verify-email");
+            }
         } else {
             //redirect to home page
             router.push("/dashboard");

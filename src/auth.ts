@@ -7,6 +7,7 @@ import type { User } from "next-auth";
 import { IUser } from "./types/next-auth";
 import { ILogin } from "./types/backend";
 import { IBackendRes } from "./types/backend";
+import { getServerSession } from "next-auth";
 
 declare module "next-auth" {
     interface User {
@@ -30,7 +31,8 @@ export const authOptions: NextAuthOptions = {
             async authorize(credentials): Promise<User | null> {
                 console.log(">> check credentials: ", credentials);
                 try {
-                    const res = await fetch("http://localhost:8080/api/v1/auth/login", {
+                    const res = await fetch(
+                        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`, {
                         method: 'POST',
                         body: JSON.stringify({
                             username: credentials?.email,
@@ -90,7 +92,7 @@ export const authOptions: NextAuthOptions = {
             }
             console.log(">> check session: ", session);
             return session;
-        },
+        }
     },
     pages: {
         signIn: "/auth/login",
@@ -99,5 +101,6 @@ export const authOptions: NextAuthOptions = {
 };
 
 export const { auth, signIn, signOut } = NextAuth(authOptions);
+export const getAuth = () => getServerSession(authOptions);
 
 
